@@ -3,10 +3,11 @@ var ikProductsImageGalleryDefault = {
     imageQuerySelector: 'img',
     imageWrapperClass: 'ikPGallery-image-wr',
     imageIdAttribute: 'data-id',
-    addProductPopup: '.add_product_popup',
-    addProductForm: '.add_product_form',
+    addProductPopup: '.add-product-popup',
+    addProductForm: '.add-product-form',
     closePopupBtn: '.ikProductsGallery-close-btn',
     savePointsButton: '.save-all-points',
+    pointTemplate: '.point-element',
     getPointsUrl: 'getPoints.php',
     savePointsUrl: 'savePoints.php',
     addProductFormOnSubmit: function (form, service, image, point) {}
@@ -108,6 +109,16 @@ _ikProductsImageGallery.prototype._addPoint = function (imageId, point) {
     pointElement.setAttribute('class', 'ikPGallery-point');
     pointElement.style.top = point.position.y;
     pointElement.style.left = point.position.x;
+    pointElement.innerHTML = document.querySelectorAll(service.settings.pointTemplate)[0].innerHTML;
+
+    for (var key in point){
+        var element = pointElement.querySelectorAll('[data-bind-value="' + key + '"]');
+        if (element.length > 0){
+            for (var i = 0; i < element.length; i++){
+                element[i].innerHTML = point[key];
+            }
+        }
+    }
 
     service.element.querySelectorAll(service.settings.imageQuerySelector + '[' + service.settings.imageIdAttribute + '="' + imageId + '"]')[0].parentNode.appendChild(pointElement);
     console.log(imageId, point);
@@ -174,12 +185,14 @@ _ikProductsImageGallery.prototype._addPopup = function (image, pointXY) {
 
     form.onsubmit = function (e) {
         e.preventDefault();
-        var point = service._serialize(form);
+        var point = service._serialize(form),
+            imageId = image.getAttribute(service.settings.imageIdAttribute);
+
         point.position = pointXY;
-        service.images[image.getAttribute(service.settings.imageIdAttribute)].points.push(point);
+        service.images[imageId].points.push(point);
         service._removePopup(overlay, popup);
+        service._addPoint(imageId, point);
         service.settings.addProductFormOnSubmit(form, service, image, point);
-        console.log(service);
     };
 
     overlay.addEventListener('click', function () {
@@ -243,10 +256,10 @@ _ikProductsImageGallery.prototype._wrap = function(el, htmlElement, attributes) 
  * @returns {{x: string, y: string}}
  * @private
  */
-_ikProductsImageGallery.prototype._getImageXY = function (image) {
+_ikProductsImageGallery.prototype._getImageXY = function (event) {
     return {
-        x: parseFloat((image.clientX * 100) / image.target.clientWidth).toFixed(2) + '%',
-        y: parseFloat((image.clientY * 100) / image.target.clientHeight).toFixed(2) + '%'
+        x: parseFloat(((event.pageX - event.target.x) * 100) / event.target.clientWidth).toFixed(2) + '%',
+        y: parseFloat(((event.pageY - event.target.y) * 100) / event.target.clientHeight).toFixed(2) + '%'
     };
 };
 

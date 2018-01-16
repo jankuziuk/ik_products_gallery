@@ -24,12 +24,12 @@
 
 <div class="ikProductsGallery" data-gallery-id="3"></div>
 
-<div class="add_product_popup" style="display: none;">
+<div class="add-product-popup" style="display: none;">
     <div class="ikProductsGallery-addProduct">
         <div class="ikProductsGallery-close">
             <span class="ikProductsGallery-close-btn"><i class="ikPGallery-icon-close"></i></span>
         </div>
-        <form class="add_product_form">
+        <form class="add-product-form">
             <input type="hidden" name="inspiration_id" value="1" />
             <div class="form-item form-group">
                 <label>Tytuł:</label>
@@ -47,6 +47,26 @@
                 <button type="submit" class="btn btn-primary btn-block">Dodaj product</button>
             </div>
         </form>
+    </div>
+</div>
+
+<div class="point-element" style="display: none;">
+    <div class="ikPGallery-point-pin"><img src="images/pin.svg" alt=""></div>
+    <div class="ikPGallery-point-popup">
+        <div class="ikPGallery-pp-title" data-bind-value="title"></div>
+        <div class="ikPGallery-pp-description" data-bind-value="description"></div>
+        <div class="ikPGallery-pp-product">
+            <div class="pp-product-top">
+                <div class="pp-product-left"><img src="https://images.morele.net/i256/1329100_0_i256.jpg" alt="" /></div>
+                <div class="pp-product-right">
+                    <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" target="_blank">Monitor LG 34UM69G-B</a>
+                    <div class="pp-product-price">1999,00 zł</div>
+                </div>
+            </div>
+            <div class="pp-product-btn">
+                <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" class="btn btn-primary btn-block" target="_blank">Sprawdź</a>
+            </div>
+        </div>
     </div>
 </div>
 
