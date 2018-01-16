@@ -2,7 +2,14 @@ body{
     margin: 0;
 }
 
+.ikPGallery-items{
+    text-align: center;
+}
+
 .ikPGallery-image-wr{
+    display: inline-block;
+    vertical-align: middle;
+    text-align: left;
     position: relative;
 }
 
@@ -30,6 +37,61 @@ body{
     width: 100%;
     max-width: 350px;
     transform: translate3d(-50%,-50%,0);
+}
+
+.ikProductsGallery-points-type{
+    margin: 0 -5px;
+}
+
+.ikProductsGallery-points-type:after{
+    content: '';
+    display: block;
+    clear: both;
+}
+
+.ikProductsGallery-point{
+    float: left;
+    width: 16.6666666%;
+    padding: 0 5px;
+}
+
+.ikProductsGallery-point label{
+    display: block;
+    cursor: pointer;
+}
+
+.ikProductsGallery-point label .point-icon{
+    border: 1px solid transparent;
+    padding: 5px 5px 2px;
+    display: block;
+}
+
+.ikProductsGallery-point label input {
+    position: absolute;
+    left: -99999em;
+}
+
+.ikProductsGallery-point label input:checked + .point-icon{
+    border-color: #007bff;
+}
+
+.ikProductsGallery-head{
+    position: relative;
+    padding-right: 40px;
+    margin-bottom: 30px;
+}
+
+.ikProductsGallery-head h2{
+    font-size: 24px;
+    margin: 0;
+    padding: 0;
+}
+
+.ikProductsGallery-close-btn{
+    position: absolute;
+    top: 50%;
+    margin-top: -12px;
+    right: 0;
 }
 
 .ikPGallery-icon-close {
@@ -63,6 +125,7 @@ body{
 .ikPGallery-point{
     position: absolute;
     z-index: 10;
+    text-align: left;
 }
 
 .ikPGallery-point-pin{
@@ -135,6 +198,30 @@ body{
 .ikPGallery-point:hover .ikPGallery-point-popup{
     opacity: 1;
     pointer-events: auto;
+}
+
+.products-list{
+    max-height: 220px;
+    overflow: hidden;
+    overflow-y: auto;
+}
+
+.product-item label{
+    display: block;
+}
+
+.product-item label input{
+    position: absolute;
+    left: -999999em;
+}
+
+.product-item .pp-product-top{
+    padding: 10px;
+    margin: 0;
+}
+
+.product-item label input:checked + .pp-product-top{
+    background: #eceff0;
 }
 
 .pp-product-top{

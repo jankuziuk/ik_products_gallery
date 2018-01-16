@@ -11,61 +11,198 @@
 
 <div class="ikProductsGallery" data-gallery-id="1">
     <div class="ikPGallery-items">
-        <img data-id="1111" class="ikPGallery-image" src="http://www.cutehdwallpapers.com/uploads/large/4k-ultra-hd-wallpapers/4k-ultra-hd-nature-background-cars.jpg" style="max-width: 100%;" alt="" />
-        <img data-id="2222" class="ikPGallery-image" src="http://www.cutehdwallpapers.com/uploads/large/4k-ultra-hd-wallpapers/4k-ultra-hd-nature-background-cars.jpg" style="max-width: 100%;" alt="" />
-        <img data-id="3333" class="ikPGallery-image" src="http://www.cutehdwallpapers.com/uploads/large/4k-ultra-hd-wallpapers/4k-ultra-hd-nature-background-cars.jpg" style="max-width: 100%;" alt="" />
-        <img data-id="4444" class="ikPGallery-image" src="http://www.cutehdwallpapers.com/uploads/large/4k-ultra-hd-wallpapers/4k-ultra-hd-nature-background-cars.jpg" style="max-width: 100%;" alt="" />
-        <img data-id="5555" class="ikPGallery-image" src="http://www.cutehdwallpapers.com/uploads/large/4k-ultra-hd-wallpapers/4k-ultra-hd-nature-background-cars.jpg" style="max-width: 100%;" alt="" />
+        <img data-id="5555" class="ikPGallery-image" src="images/preview.jpg" style="max-width: 100%;" alt="" />
     </div>
-    <button type="button" class="btn btn-primary save-all-points">Zapisz zmiany!!!</button>
+    <div style="margin: 20px; text-align: center;">
+        <button type="button" class="btn btn-primary btn-block save-all-points">Zapisz zmiany!!!</button>
+    </div>
 </div>
-
-<div class="ikProductsGallery" data-gallery-id="2"></div>
-
-<div class="ikProductsGallery" data-gallery-id="3"></div>
 
 <div class="add-product-popup" style="display: none;">
     <div class="ikProductsGallery-addProduct">
-        <div class="ikProductsGallery-close">
+        <div class="ikProductsGallery-head">
+            <h2>Dodaj produkt</h2>
             <span class="ikProductsGallery-close-btn"><i class="ikPGallery-icon-close"></i></span>
         </div>
         <form class="add-product-form">
-            <input type="hidden" name="inspiration_id" value="1" />
-            <div class="form-item form-group">
-                <label>Tytuł:</label>
-                <input type="text" name="title" class="form-control" />
+            <div class="form-group">
+                <label>Wybież ikonę:</label>
+                <div class="ikProductsGallery-points-type">
+                    <div class="ikProductsGallery-point">
+                        <label>
+                            <input type="radio" name="point_icon" value="pin_blue.svg" />
+                            <span class="point-icon">
+                            <img src="images/pin_blue.svg" alt="" />
+                        </span>
+                        </label>
+                    </div>
+                    <div class="ikProductsGallery-point">
+                        <label>
+                            <input type="radio" name="point_icon" value="pin_green.svg" />
+                            <span class="point-icon">
+                            <img src="images/pin_green.svg" alt="" />
+                        </span>
+                        </label>
+                    </div>
+                    <div class="ikProductsGallery-point">
+                        <label>
+                            <input type="radio" name="point_icon" value="pin_grey.svg" />
+                            <span class="point-icon">
+                            <img src="images/pin_grey.svg" alt="" />
+                        </span>
+                        </label>
+                    </div>
+                    <div class="ikProductsGallery-point">
+                        <label>
+                            <input type="radio" name="point_icon" value="pin_red.svg" />
+                            <span class="point-icon">
+                            <img src="images/pin_red.svg" alt="" />
+                        </span>
+                        </label>
+                    </div>
+                </div>
             </div>
-            <div class="form-item form-group">
-                <label>ID produktu:</label>
-                <input type="text" name="product_id" class="form-control" />
+            <div class="form-group">
+                <label>Wybież produkt z listy:</label>
+                <div class="products-list">
+                    <div class="product-item">
+                        <label>
+                            <input type="radio" name="product_id" value="1329100" />
+                            <div class="pp-product-top">
+                                <div class="pp-product-left"><img src="https://images.morele.net/i256/1329100_0_i256.jpg" alt="" /></div>
+                                <div class="pp-product-right">
+                                    <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" target="_blank">Monitor LG 34UM69G-B</a>
+                                    <div class="pp-product-price">1999,00 zł</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="product-item">
+                        <label>
+                            <input type="radio" name="product_id" value="1329100" />
+                            <div class="pp-product-top">
+                                <div class="pp-product-left"><img src="https://images.morele.net/i256/1329100_0_i256.jpg" alt="" /></div>
+                                <div class="pp-product-right">
+                                    <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" target="_blank">Monitor LG 34UM69G-B</a>
+                                    <div class="pp-product-price">1999,00 zł</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="product-item">
+                        <label>
+                            <input type="radio" name="product_id" value="1329100" />
+                            <div class="pp-product-top">
+                                <div class="pp-product-left"><img src="https://images.morele.net/i256/1329100_0_i256.jpg" alt="" /></div>
+                                <div class="pp-product-right">
+                                    <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" target="_blank">Monitor LG 34UM69G-B</a>
+                                    <div class="pp-product-price">1999,00 zł</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="product-item">
+                        <label>
+                            <input type="radio" name="product_id" value="1329100" />
+                            <div class="pp-product-top">
+                                <div class="pp-product-left"><img src="https://images.morele.net/i256/1329100_0_i256.jpg" alt="" /></div>
+                                <div class="pp-product-right">
+                                    <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" target="_blank">Monitor LG 34UM69G-B</a>
+                                    <div class="pp-product-price">1999,00 zł</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="product-item">
+                        <label>
+                            <input type="radio" name="product_id" value="1329100" />
+                            <div class="pp-product-top">
+                                <div class="pp-product-left"><img src="https://images.morele.net/i256/1329100_0_i256.jpg" alt="" /></div>
+                                <div class="pp-product-right">
+                                    <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" target="_blank">Monitor LG 34UM69G-B</a>
+                                    <div class="pp-product-price">1999,00 zł</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="product-item">
+                        <label>
+                            <input type="radio" name="product_id" value="1329100" />
+                            <div class="pp-product-top">
+                                <div class="pp-product-left"><img src="https://images.morele.net/i256/1329100_0_i256.jpg" alt="" /></div>
+                                <div class="pp-product-right">
+                                    <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" target="_blank">Monitor LG 34UM69G-B</a>
+                                    <div class="pp-product-price">1999,00 zł</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="product-item">
+                        <label>
+                            <input type="radio" name="product_id" value="1329100" />
+                            <div class="pp-product-top">
+                                <div class="pp-product-left"><img src="https://images.morele.net/i256/1329100_0_i256.jpg" alt="" /></div>
+                                <div class="pp-product-right">
+                                    <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" target="_blank">Monitor LG 34UM69G-B</a>
+                                    <div class="pp-product-price">1999,00 zł</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="product-item">
+                        <label>
+                            <input type="radio" name="product_id" value="1329100" />
+                            <div class="pp-product-top">
+                                <div class="pp-product-left"><img src="https://images.morele.net/i256/1329100_0_i256.jpg" alt="" /></div>
+                                <div class="pp-product-right">
+                                    <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" target="_blank">Monitor LG 34UM69G-B</a>
+                                    <div class="pp-product-price">1999,00 zł</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="product-item">
+                        <label>
+                            <input type="radio" name="product_id" value="1329100" />
+                            <div class="pp-product-top">
+                                <div class="pp-product-left"><img src="https://images.morele.net/i256/1329100_0_i256.jpg" alt="" /></div>
+                                <div class="pp-product-right">
+                                    <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" target="_blank">Monitor LG 34UM69G-B</a>
+                                    <div class="pp-product-price">1999,00 zł</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="product-item">
+                        <label>
+                            <input type="radio" name="product_id" value="1329100" />
+                            <div class="pp-product-top">
+                                <div class="pp-product-left"><img src="https://images.morele.net/i256/1329100_0_i256.jpg" alt="" /></div>
+                                <div class="pp-product-right">
+                                    <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" target="_blank">Monitor LG 34UM69G-B</a>
+                                    <div class="pp-product-price">1999,00 zł</div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
             </div>
-            <div class="form-item form-group">
-                <label>Opis:</label>
-                <textarea name="description" class="form-control" rows="3"></textarea>
-            </div>
-            <div class="form-item">
-                <button type="submit" class="btn btn-primary btn-block">Dodaj product</button>
-            </div>
+            <button type="submit" class="btn btn-primary btn-block">Dodaj</button>
         </form>
     </div>
 </div>
 
 <div class="point-element" style="display: none;">
-    <div class="ikPGallery-point-pin"><img src="images/pin.svg" alt=""></div>
-    <div class="ikPGallery-point-popup">
-        <div class="ikPGallery-pp-title" data-bind-value="title"></div>
-        <div class="ikPGallery-pp-description" data-bind-value="description"></div>
-        <div class="ikPGallery-pp-product">
-            <div class="pp-product-top">
-                <div class="pp-product-left"><img src="https://images.morele.net/i256/1329100_0_i256.jpg" alt="" /></div>
-                <div class="pp-product-right">
-                    <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" target="_blank">Monitor LG 34UM69G-B</a>
-                    <div class="pp-product-price">1999,00 zł</div>
-                </div>
+    <div class="ikPGallery-pp-product">
+        <div class="pp-product-top">
+            <div class="pp-product-left"><img src="https://images.morele.net/i256/1329100_0_i256.jpg" alt="" /></div>
+            <div class="pp-product-right">
+                <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" target="_blank">Monitor LG 34UM69G-B</a>
+                <div class="pp-product-price">1999,00 zł</div>
             </div>
-            <div class="pp-product-btn">
-                <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" class="btn btn-primary btn-block" target="_blank">Sprawdź</a>
-            </div>
+        </div>
+        <div class="pp-product-btn">
+            <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" class="btn btn-primary btn-block" target="_blank">Sprawdź</a>
         </div>
     </div>
 </div>

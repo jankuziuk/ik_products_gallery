@@ -10,6 +10,9 @@ var ikProductsImageGalleryDefault = {
     pointTemplate: '.point-element',
     getPointsUrl: 'getPoints.php',
     savePointsUrl: 'savePoints.php',
+    selectTypeIcon: '[name="point_icon"]',
+    typeIconDefault: 'pin_red,svg',
+    imagesUrl: 'images/',
     addProductFormOnSubmit: function (form, service, image, point) {}
 };
 
@@ -40,11 +43,19 @@ var _ikProductsImageGallery = function (element, settings) {
     this._init();
 };
 
+/**
+ * Init plugin methods
+ * @private
+ */
 _ikProductsImageGallery.prototype._init = function () {
     this._initPoints();
     this._savePoints();
 };
 
+/**
+ * GET and init points
+ * @private
+ */
 _ikProductsImageGallery.prototype._initPoints = function () {
     var service = this,
         images = service.element.querySelectorAll(service.settings.imageQuerySelector),
@@ -76,7 +87,7 @@ _ikProductsImageGallery.prototype._initPoints = function () {
             console.log('Not found images selector: ' + this.settings.imageQuerySelector);
         }
 
-        service._http("POST", '/getPoints.php?gallery_id='+service.galleryId, { images: imagesIds }, function () {
+        service._http("POST", service.settings.getPointsUrl + '?id='+service.galleryId, { images: imagesIds }, function () {
             try {
                 if (this.response){
                     service._setPoints(JSON.parse(this.response));
@@ -89,6 +100,12 @@ _ikProductsImageGallery.prototype._initPoints = function () {
         throw (e);
     }
 };
+
+/**
+ * Add points from API
+ * @param images
+ * @private
+ */
 _ikProductsImageGallery.prototype._setPoints = function (images) {
     var service = this;
     if (service.images) {
@@ -102,6 +119,13 @@ _ikProductsImageGallery.prototype._setPoints = function (images) {
         }
     }
 };
+
+/**
+ * Add point on image
+ * @param imageId
+ * @param point
+ * @private
+ */
 _ikProductsImageGallery.prototype._addPoint = function (imageId, point) {
     var service = this,
         pointElement = document.createElement('div');
@@ -109,7 +133,10 @@ _ikProductsImageGallery.prototype._addPoint = function (imageId, point) {
     pointElement.setAttribute('class', 'ikPGallery-point');
     pointElement.style.top = point.position.y;
     pointElement.style.left = point.position.x;
-    pointElement.innerHTML = document.querySelectorAll(service.settings.pointTemplate)[0].innerHTML;
+    pointElement.innerHTML = '<div class="ikPGallery-point-pin">' +
+                                '<img src="' + service.settings.imagesUrl + point.point_icon + '" alt="">' +
+                            '</div>' +
+                            '<div class="ikPGallery-point-popup">' + document.querySelectorAll(service.settings.pointTemplate)[0].innerHTML + '</div>';
 
     for (var key in point){
         var element = pointElement.querySelectorAll('[data-bind-value="' + key + '"]');
@@ -119,47 +146,8 @@ _ikProductsImageGallery.prototype._addPoint = function (imageId, point) {
             }
         }
     }
-
     service.element.querySelectorAll(service.settings.imageQuerySelector + '[' + service.settings.imageIdAttribute + '="' + imageId + '"]')[0].parentNode.appendChild(pointElement);
-    console.log(imageId, point);
 };
-//
-// /**
-//  * Add point function
-//  * @private
-//  */
-// _ikProductsImageGallery.prototype._addPoint = function () {
-//     var service = this,
-//         images = service.element.querySelectorAll(service.settings.imageQuerySelector);
-//
-//     try {
-//         if (images.length > 0) {
-//             for (var i = 0; i < images.length; i++) {
-//                 var image = images[i],
-//                     imageId = image.getAttribute(service.settings.imageIdAttribute);
-//
-//                 service._wrap(image, 'div', {
-//                     'class': service.settings.imageWrapperClass,
-//                     'data-image-id': imageId
-//                 });
-//
-//                 service.images[imageId] = {
-//                     id: imageId,
-//                     points: []
-//                 };
-//
-//                 image.addEventListener('click', function (e) {
-//                     e.preventDefault();
-//                     service._addPopup(this, service._getImageXY(e));
-//                 });
-//             }
-//         } else {
-//             console.log('Not found images selector: ' + this.settings.imageQuerySelector);
-//         }
-//     } catch (e){
-//         throw (e);
-//     }
-// };
 
 /**
  * Add popup to set point
@@ -186,8 +174,17 @@ _ikProductsImageGallery.prototype._addPopup = function (image, pointXY) {
     form.onsubmit = function (e) {
         e.preventDefault();
         var point = service._serialize(form),
-            imageId = image.getAttribute(service.settings.imageIdAttribute);
+            imageId = image.getAttribute(service.settings.imageIdAttribute),
+            pointsTypes = service.element.querySelectorAll(service.settings.selectTypeIcon);
 
+        for (var i = 0; i < pointsTypes.length; i++) {
+            if (pointsTypes[i].checked == true) {
+                point.point_icon = pointsTypes[i].value;
+                break;
+            } else {
+                point.point_icon = service.settings.typeIconDefault;
+            }
+        }
         point.position = pointXY;
         service.images[imageId].points.push(point);
         service._removePopup(overlay, popup);
@@ -203,11 +200,21 @@ _ikProductsImageGallery.prototype._addPopup = function (image, pointXY) {
     });
 };
 
+/**
+ * Remove popup
+ * @param overlay
+ * @param popup
+ * @private
+ */
 _ikProductsImageGallery.prototype._removePopup = function (overlay, popup) {
     overlay.parentNode.removeChild(overlay);
     popup.parentNode.removeChild(popup);
 };
 
+/**
+ * Save points comfigurations
+ * @private
+ */
 _ikProductsImageGallery.prototype._savePoints = function () {
     var service = this,
         buttons = service.element.querySelectorAll(service.settings.savePointsButton);
@@ -215,21 +222,29 @@ _ikProductsImageGallery.prototype._savePoints = function () {
     for (var i = 0; i < buttons.length; i++){
         buttons[i].addEventListener('click', function (e) {
             e.preventDefault();
-            service._http('POST', service.settings.savePointsUrl + '?gallery_id='+service.galleryId, service.images, function () {
-                alert("Zapisano!!!");
+            service._http('POST', service.settings.savePointsUrl + '?id='+service.galleryId, service.images, function () {
+                console.log("Zapisano!!!");
             });
         })
     }
 };
 
+/**
+ * Helper function to xht requests
+ * @param method
+ * @param url
+ * @param data
+ * @param callback
+ * @private
+ */
 _ikProductsImageGallery.prototype._http = function (method, url, data, callback) {
-    var xhr = new XMLHttpRequest(),
+    var httpRequest = new XMLHttpRequest(),
         callback = callback || function (response) {};
 
-    xhr.open(method, url, false);
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.onreadystatechange = callback;
-    xhr.send(JSON.stringify(data));
+    httpRequest.open(method, url, false);
+    httpRequest.setRequestHeader("Content-type", "application/json");
+    httpRequest.onreadystatechange = callback;
+    httpRequest.send(JSON.stringify(data));
 };
 
 /**
