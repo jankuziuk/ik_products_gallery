@@ -12,7 +12,7 @@ var ikProductsImageGalleryDefault = {
     getPointsUrl: 'getPoints.php',
     savePointsUrl: 'savePoints.php',
     selectTypeIcon: '[name="point_icon"]',
-    typeIconDefault: 'pin_red,svg',
+    typeIconDefault: 'pin_red.svg',
     imagesUrl: 'images/',
     addProductFormOnSubmit: function (form, service, image, point) {}
 };
@@ -217,28 +217,28 @@ _ikProductsImageGallery.prototype._removePopup = function (overlay, popup) {
     popup.parentNode.removeChild(popup);
 };
 
+/**
+ * Add draggable event to point
+ * @param point
+ * @param parent
+ * @param pointElement
+ * @private
+ */
 _ikProductsImageGallery.prototype._draggable = function (point, parent, pointElement) {
     var service = this,
         position = point.position,
         image = parent.querySelectorAll(service.settings.imageQuerySelector)[0];
-    console.log(point, parent, pointElement);
-
-    pointElement.ontouchstart = function(e) {
-        console.log('test touch');
-    };
 
     pointElement.onmousedown = function(e) {
         position = point.position;
         service._addClass(pointElement, 'dragged');
         service._addClass(image, 'dragged');
 
-        console.log('test mousedown');
-
         image.onmousemove = function (e) {
-            var cord = service._getImageXY(e);
-            position = cord;
-            pointElement.style.top = cord.y;
-            pointElement.style.left = cord.x;
+            var coordinates = service._getImageXY(e);
+            position = coordinates;
+            pointElement.style.top = coordinates.y;
+            pointElement.style.left = coordinates.x;
         };
 
         document.onmouseup = function (e) {
@@ -247,14 +247,28 @@ _ikProductsImageGallery.prototype._draggable = function (point, parent, pointEle
             service._removeClass(pointElement, 'dragged');
             service._removeClass(image, 'dragged');
         };
-
-        // pointElement.onmouseup = function (e) {
-        //     image.onmousemove = null;
-        //     point.position = position;
-        //     service._removeClass(pointElement, 'dragged');
-        //     service._removeClass(image, 'dragged');
-        // };
     };
+
+    pointElement.addEventListener('touchstart', function (e) {
+        position = point.position;
+    });
+
+    pointElement.addEventListener('touchmove', function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        var coordinates = service._getTouchXY(event, image);
+        position = coordinates;
+        pointElement.style.top = coordinates.y;
+        pointElement.style.left = coordinates.x;
+        service._addClass(pointElement, 'dragged');
+        service._addClass(image, 'dragged');
+    });
+
+    pointElement.addEventListener('touchend', function (e) {
+        point.position = position;
+        service._removeClass(pointElement, 'dragged');
+        service._removeClass(image, 'dragged');
+    });
 
     image.ondragstart = function() {
         return false;
@@ -360,9 +374,47 @@ _ikProductsImageGallery.prototype._removeClass = function(element, className) {
  * @private
  */
 _ikProductsImageGallery.prototype._getImageXY = function (event) {
+    console.log(event);
     return {
         x: parseFloat(((event.pageX - event.target.x) * 100) / event.target.clientWidth).toFixed(2) + '%',
         y: parseFloat(((event.pageY - event.target.y) * 100) / event.target.clientHeight).toFixed(2) + '%'
+    };
+};
+
+_ikProductsImageGallery.prototype._getTouchXY = function (event, image) {
+    var imageOffset = this._getOffset(image),
+        x = parseFloat(((event.changedTouches[0].pageX - imageOffset.left) * 100) / image.clientWidth).toFixed(2),
+        y = parseFloat(((event.changedTouches[0].pageY - imageOffset.top) * 100) / image.clientHeight).toFixed(2);
+
+    if (x < 0){
+        x = 0;
+    } else if(x > 100) {
+        x = 100;
+    }
+
+    if (y < 0){
+        y = 0;
+    } else if(y > 100) {
+        y = 100;
+    }
+
+    return {
+        x: x + '%',
+        y: y + '%'
+    }
+};
+
+_ikProductsImageGallery.prototype._getOffset = function (element) {
+    var top = 0, left = 0;
+    do {
+        top += element.offsetTop  || 0;
+        left += element.offsetLeft || 0;
+        element = element.offsetParent;
+    } while(element);
+
+    return {
+        top: top,
+        left: left
     };
 };
 

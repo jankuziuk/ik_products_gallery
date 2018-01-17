@@ -160,9 +160,9 @@ body{
     bottom: 100%;
     left: 50%;
     margin-left: -160px;
+    margin-bottom: 42px;
     background: #fff;
     padding: 20px;
-    margin-bottom: 6px;
     pointer-events: none;
     -webkit-transition: all .3s ease;
     -o-transition: all .3s ease;
@@ -203,10 +203,7 @@ body{
 
 .ikPGallery-point.dragged{
     pointer-events: none;
-}
-
-.ikPGallery-point:not(.dragged):hover .ikPGallery-point-pin{
-    opacity: 0;
+    z-index: 100;
 }
 
 .ikPGallery-point:not(.dragged):hover .ikPGallery-point-popup{

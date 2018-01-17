@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>IK Products Gallery</title>
+    <meta name="viewport" content="width=device-width,user-scalable=no">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
 
 
-<div class="ikProductsGallery" style="margin: 50px;" data-gallery-id="1">
+<div class="ikProductsGallery" style="margin: 10px;" data-gallery-id="1">
     <div class="ikPGallery-items">
         <img data-id="5555" class="ikPGallery-image" src="images/preview.jpg" style="max-width: 100%;" alt="" />
     </div>
@@ -46,17 +47,33 @@
                     </div>
                     <div class="ikProductsGallery-point">
                         <label>
-                            <input type="radio" name="point_icon" value="pin_grey.svg" />
+                            <input type="radio" name="point_icon" value="pin_red.svg" />
                             <span class="point-icon">
-                            <img src="images/pin_grey.svg" alt="" />
+                            <img src="images/pin_red.svg" alt="" />
                         </span>
                         </label>
                     </div>
                     <div class="ikProductsGallery-point">
                         <label>
-                            <input type="radio" name="point_icon" value="pin_red.svg" />
+                            <input type="radio" name="point_icon" value="pin_yellow.svg" />
                             <span class="point-icon">
-                            <img src="images/pin_red.svg" alt="" />
+                            <img src="images/pin_yellow.svg" alt="" />
+                        </span>
+                        </label>
+                    </div>
+                    <div class="ikProductsGallery-point">
+                        <label>
+                            <input type="radio" name="point_icon" value="pin_orange.svg" />
+                            <span class="point-icon">
+                            <img src="images/pin_orange.svg" alt="" />
+                        </span>
+                        </label>
+                    </div>
+                    <div class="ikProductsGallery-point">
+                        <label>
+                            <input type="radio" name="point_icon" value="pin_grey.svg" />
+                            <span class="point-icon">
+                            <img src="images/pin_grey.svg" alt="" />
                         </span>
                         </label>
                     </div>
@@ -209,7 +226,7 @@
         </div>
     </div>
 </div>
-
-<script type="text/javascript" src="js/ikProductsGallery.js"></script>
+<?php $date = new DateTime(); ?>
+<script type="text/javascript" src="js/ikProductsGallery.js?v=<?php echo $date->getTimestamp(); ?>"></script>
 </body>
 </html>
