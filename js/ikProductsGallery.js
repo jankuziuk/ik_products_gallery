@@ -1,4 +1,5 @@
 var ikProductsImageGalleryDefault = {
+    draggable: true,
     galleyWrapperIdAttribute: 'data-gallery-id',
     imageQuerySelector: 'img',
     imageWrapperClass: 'ikPGallery-image-wr',
@@ -128,7 +129,8 @@ _ikProductsImageGallery.prototype._setPoints = function (images) {
  */
 _ikProductsImageGallery.prototype._addPoint = function (imageId, point) {
     var service = this,
-        pointElement = document.createElement('div');
+        pointElement = document.createElement('div'),
+        parent = service.element.querySelectorAll(service.settings.imageQuerySelector + '[' + service.settings.imageIdAttribute + '="' + imageId + '"]')[0].parentNode;
 
     pointElement.setAttribute('class', 'ikPGallery-point');
     pointElement.style.top = point.position.y;
@@ -146,7 +148,11 @@ _ikProductsImageGallery.prototype._addPoint = function (imageId, point) {
             }
         }
     }
-    service.element.querySelectorAll(service.settings.imageQuerySelector + '[' + service.settings.imageIdAttribute + '="' + imageId + '"]')[0].parentNode.appendChild(pointElement);
+    parent.appendChild(pointElement);
+
+    if (this.settings.draggable){
+        this._draggable(point, parent, pointElement);
+    }
 };
 
 /**
@@ -211,6 +217,50 @@ _ikProductsImageGallery.prototype._removePopup = function (overlay, popup) {
     popup.parentNode.removeChild(popup);
 };
 
+_ikProductsImageGallery.prototype._draggable = function (point, parent, pointElement) {
+    var service = this,
+        position = point.position,
+        image = parent.querySelectorAll(service.settings.imageQuerySelector)[0];
+    console.log(point, parent, pointElement);
+
+    pointElement.ontouchstart = function(e) {
+        console.log('test touch');
+    };
+
+    pointElement.onmousedown = function(e) {
+        position = point.position;
+        service._addClass(pointElement, 'dragged');
+        service._addClass(image, 'dragged');
+
+        console.log('test mousedown');
+
+        image.onmousemove = function (e) {
+            var cord = service._getImageXY(e);
+            position = cord;
+            pointElement.style.top = cord.y;
+            pointElement.style.left = cord.x;
+        };
+
+        document.onmouseup = function (e) {
+            image.onmousemove = null;
+            point.position = position;
+            service._removeClass(pointElement, 'dragged');
+            service._removeClass(image, 'dragged');
+        };
+
+        // pointElement.onmouseup = function (e) {
+        //     image.onmousemove = null;
+        //     point.position = position;
+        //     service._removeClass(pointElement, 'dragged');
+        //     service._removeClass(image, 'dragged');
+        // };
+    };
+
+    image.ondragstart = function() {
+        return false;
+    };
+};
+
 /**
  * Save points comfigurations
  * @private
@@ -263,6 +313,44 @@ _ikProductsImageGallery.prototype._wrap = function(el, htmlElement, attributes) 
 
     el.parentNode.insertBefore(wrapper, el);
     wrapper.appendChild(el);
+};
+
+_ikProductsImageGallery.prototype._addClass = function(element, className) {
+    var newClassName = "";
+    var i;
+    var classes = element.className.split(" ");
+    for(i = 0; i < classes.length; i++) {
+        if(classes[i] !== className) {
+            newClassName += classes[i] + " ";
+        }
+    }
+    element.className = newClassName;
+};
+
+_ikProductsImageGallery.prototype._hasClass = function(element, className) {
+    if (element.classList)
+        return element.classList.contains(className);
+    else
+        return !!element.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
+};
+
+_ikProductsImageGallery.prototype._addClass = function(element, className) {
+    var service = this;
+    if (element.classList) {
+        element.classList.add(className);
+    } else if (!service._hasClass(element, className)) {
+        element.className += " " + className
+    }
+};
+
+_ikProductsImageGallery.prototype._removeClass = function(element, className) {
+    var service = this;
+    if (element.classList) {
+        element.classList.remove(className);
+    } else if (service._hasClass(element, className)) {
+        var reg = new RegExp('(\\s|^)' + className + '(\\s|$)');
+        element.className=element.className.replace(reg, ' ')
+    }
 };
 
 /**

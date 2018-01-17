@@ -9,7 +9,7 @@
 <body>
 
 
-<div class="ikProductsGallery" data-gallery-id="1">
+<div class="ikProductsGallery" style="margin: 50px;" data-gallery-id="1">
     <div class="ikPGallery-items">
         <img data-id="5555" class="ikPGallery-image" src="images/preview.jpg" style="max-width: 100%;" alt="" />
     </div>
@@ -201,8 +201,11 @@
                 <div class="pp-product-price">1999,00 zł</div>
             </div>
         </div>
+        <div class="pp-product-btn" style="margin-bottom: 5px;">
+            <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" class="btn btn-primary btn-block" target="_blank">Zobać</a>
+        </div>
         <div class="pp-product-btn">
-            <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" class="btn btn-primary btn-block" target="_blank">Sprawdź</a>
+            <button type="button" class="btn btn-danger btn-block">Usuń</button>
         </div>
     </div>
 </div>

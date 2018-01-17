@@ -4,6 +4,7 @@ body{
 
 .ikPGallery-items{
     text-align: center;
+    user-select: none;
 }
 
 .ikPGallery-image-wr{
@@ -37,6 +38,7 @@ body{
     width: 100%;
     max-width: 350px;
     transform: translate3d(-50%,-50%,0);
+    overflow: hidden;
 }
 
 .ikProductsGallery-points-type{
@@ -92,6 +94,7 @@ body{
     top: 50%;
     margin-top: -12px;
     right: 0;
+    cursor: pointer;
 }
 
 .ikPGallery-icon-close {
@@ -110,6 +113,12 @@ body{
     position: absolute;
     width: 23px;
 }
+
+.ikProductsGallery-close-btn:hover .ikPGallery-icon-close:before,
+.ikProductsGallery-close-btn:hover .ikPGallery-icon-close:after{
+    background: #4c4c4c;
+}
+
 
 .ikPGallery-icon-close:before{
     top: 8px;
@@ -191,11 +200,16 @@ body{
 .ikPGallery-point:hover{
     z-index: 15;
 }
-.ikPGallery-point:hover .ikPGallery-point-pin{
+
+.ikPGallery-point.dragged{
+    pointer-events: none;
+}
+
+.ikPGallery-point:not(.dragged):hover .ikPGallery-point-pin{
     opacity: 0;
 }
 
-.ikPGallery-point:hover .ikPGallery-point-popup{
+.ikPGallery-point:not(.dragged):hover .ikPGallery-point-popup{
     opacity: 1;
     pointer-events: auto;
 }
