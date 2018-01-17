@@ -312,7 +312,7 @@ _ikProductsImageGallery.prototype._http = function (method, url, data, callback)
 };
 
 /**
- * Add Wrapper to element
+ * Add Wrapper to element helper
  * @param el
  * @param htmlElement
  * @param attributes
@@ -329,18 +329,13 @@ _ikProductsImageGallery.prototype._wrap = function(el, htmlElement, attributes) 
     wrapper.appendChild(el);
 };
 
-_ikProductsImageGallery.prototype._addClass = function(element, className) {
-    var newClassName = "";
-    var i;
-    var classes = element.className.split(" ");
-    for(i = 0; i < classes.length; i++) {
-        if(classes[i] !== className) {
-            newClassName += classes[i] + " ";
-        }
-    }
-    element.className = newClassName;
-};
-
+/**
+ * Check class exist of element
+ * @param element
+ * @param className
+ * @returns {boolean}
+ * @private
+ */
 _ikProductsImageGallery.prototype._hasClass = function(element, className) {
     if (element.classList)
         return element.classList.contains(className);
@@ -348,6 +343,12 @@ _ikProductsImageGallery.prototype._hasClass = function(element, className) {
         return !!element.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'));
 };
 
+/**
+ * Add class to element helper
+ * @param element
+ * @param className
+ * @private
+ */
 _ikProductsImageGallery.prototype._addClass = function(element, className) {
     var service = this;
     if (element.classList) {
@@ -357,6 +358,12 @@ _ikProductsImageGallery.prototype._addClass = function(element, className) {
     }
 };
 
+/**
+ * Remove class from element helper
+ * @param element
+ * @param className
+ * @private
+ */
 _ikProductsImageGallery.prototype._removeClass = function(element, className) {
     var service = this;
     if (element.classList) {
@@ -381,6 +388,13 @@ _ikProductsImageGallery.prototype._getImageXY = function (event) {
     };
 };
 
+/**
+ * Get (X,Y) of point on touch
+ * @param event
+ * @param image
+ * @returns {{x: string, y: string}}
+ * @private
+ */
 _ikProductsImageGallery.prototype._getTouchXY = function (event, image) {
     var imageOffset = this._getOffset(image),
         x = parseFloat(((event.changedTouches[0].pageX - imageOffset.left) * 100) / image.clientWidth).toFixed(2),
@@ -404,6 +418,12 @@ _ikProductsImageGallery.prototype._getTouchXY = function (event, image) {
     }
 };
 
+/**
+ * Get element offset helper
+ * @param element
+ * @returns {{top: number, left: number}}
+ * @private
+ */
 _ikProductsImageGallery.prototype._getOffset = function (element) {
     var top = 0, left = 0;
     do {
