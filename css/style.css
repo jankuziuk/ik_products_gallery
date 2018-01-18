@@ -25,6 +25,7 @@ body{
     left: 0;
     right: 0;
     bottom: 0;
+    z-index: 90;
     background: rgba(0,0,0,0.7);
 }
 
@@ -157,30 +158,86 @@ body{
 .ikPGallery-point-popup{
     position: absolute;
     width: 320px;
-    bottom: 100%;
-    left: 50%;
-    margin-left: -160px;
-    margin-bottom: 42px;
     background: #fff;
     padding: 20px;
     pointer-events: none;
-    -webkit-transition: all .3s ease;
-    -o-transition: all .3s ease;
-    transition: all .3s ease;
+    -webkit-transition: opacity .3s ease;
+    -o-transition: opacity .3s ease;
+    transition: opacity .3s ease;
     opacity: 0;
     -webkit-box-shadow: 0 0 10px 2px rgba(0,0,0,.05);
     box-shadow: 0 0 10px 2px rgba(0,0,0,.05);
 }
 
+.ikPGallery-point-popup:before,
 .ikPGallery-point-popup:after {
     content: '';
+    position: absolute;
+}
+
+.ikPGallery-point-popup:before{
+    height: 10px;
+    left: 0;
+    right: 0;
+}
+
+/** Position Y top */
+.ikPGallery-point.popup-y-top .ikPGallery-point-popup{
+    bottom: 100%;
+    margin-bottom: 42px;
+}
+.ikPGallery-point.popup-y-top .ikPGallery-point-popup:before{
+    top: 100%;
+}
+.ikPGallery-point.popup-y-top .ikPGallery-point-popup:after{
     border-style: solid;
     border-width: 6px 6px 6px 6px;
     border-color: #fff transparent transparent transparent;
-    position: absolute;
+    top: 100%;
+}
+
+/** Position Y bottom */
+.ikPGallery-point.popup-y-bottom .ikPGallery-point-popup{
+    top: 100%;
+    margin-top: 6px;
+}
+.ikPGallery-point.popup-y-top .ikPGallery-point-popup:before{
+    bottom: 100%;
+}
+.ikPGallery-point.popup-y-bottom .ikPGallery-point-popup:after{
+    border-style: solid;
+    border-width: 6px 6px 6px 6px;
+    border-color: transparent transparent #fff transparent;
+    bottom: 100%;
+}
+
+/** Position X center */
+.ikPGallery-point.popup-x-center .ikPGallery-point-popup{
+    left: 50%;
+    margin-left: -160px;
+}
+
+.ikPGallery-point.popup-x-center .ikPGallery-point-popup:after{
     left: 50%;
     margin-left: -6px;
-    top: 100%;
+}
+
+/** Position X left */
+.ikPGallery-point.popup-x-left .ikPGallery-point-popup{
+    right: -14px;
+}
+
+.ikPGallery-point.popup-x-left .ikPGallery-point-popup:after{
+    right: 8px;
+}
+
+/** Position X right */
+.ikPGallery-point.popup-x-right .ikPGallery-point-popup{
+    left: -14px;
+}
+
+.ikPGallery-point.popup-x-right .ikPGallery-point-popup:after{
+    left: 8px;
 }
 
 .ikPGallery-pp-title{
@@ -197,16 +254,21 @@ body{
     font-weight: 300;
     margin-bottom: 20px;
 }
-.ikPGallery-point:hover{
+.ikPGallery-point:hover,
+.ikPGallery-point.is-touched{
     z-index: 15;
 }
 
 .ikPGallery-point.dragged{
-    pointer-events: none;
     z-index: 100;
 }
 
-.ikPGallery-point:not(.dragged):hover .ikPGallery-point-popup{
+.ikPGallery-point.dragged .ikPGallery-point-pin{
+    pointer-events: none;
+}
+
+.ikProductsGallery.is-not-touch-device .ikPGallery-point:not(.dragged):hover .ikPGallery-point-popup,
+.ikProductsGallery.is-touch-device .ikPGallery-point:not(.dragged).is-touched .ikPGallery-point-popup{
     opacity: 1;
     pointer-events: auto;
 }

@@ -1,5 +1,11 @@
 var ikProductsImageGalleryDefault = {
     draggable: true,
+    popupIndent: {
+        top: 220,
+        left: 160,
+        right: 160,
+        bottom: 0
+    },
     galleyWrapperIdAttribute: 'data-gallery-id',
     imageQuerySelector: 'img',
     imageWrapperClass: 'ikPGallery-image-wr',
@@ -39,6 +45,7 @@ var _ikProductsImageGallery = function (element, settings) {
     this.element = element;
     this.settings = settings;
     this.galleryId = element.getAttribute(this.settings.galleyWrapperIdAttribute);
+    this.imagesElements = this.element.querySelectorAll(this.settings.imageQuerySelector);
     this.images = {};
 
     this._init();
@@ -49,8 +56,10 @@ var _ikProductsImageGallery = function (element, settings) {
  * @private
  */
 _ikProductsImageGallery.prototype._init = function () {
+    this._addClass(this.element, this._is_touch_device() ? 'is-touch-device' : 'is-not-touch-device');
     this._initPoints();
     this._savePoints();
+    this._onResize();
 };
 
 /**
@@ -59,13 +68,12 @@ _ikProductsImageGallery.prototype._init = function () {
  */
 _ikProductsImageGallery.prototype._initPoints = function () {
     var service = this,
-        images = service.element.querySelectorAll(service.settings.imageQuerySelector),
         imagesIds = [];
 
     try {
-        if (images.length > 0) {
-            for (var i = 0; i < images.length; i++) {
-                var image = images[i],
+        if (service.imagesElements.length > 0) {
+            for (var i = 0; i < service.imagesElements.length; i++) {
+                var image = service.imagesElements[i],
                     imageId = image.getAttribute(service.settings.imageIdAttribute);
 
                 service._wrap(image, 'div', {
@@ -80,8 +88,16 @@ _ikProductsImageGallery.prototype._initPoints = function () {
 
                 image.addEventListener('click', function (e) {
                     e.preventDefault();
-                    service._addPopup(this, service._getImageXY(e));
+                    var openPoints = this.parentNode.querySelectorAll('.ikPGallery-point.is-touched');
+                    if (openPoints.length === 0) {
+                        service._addPopup(this, service._getImageXY(e));
+                    } else {
+                        for (var i = 0; i < openPoints.length; i++){
+                            service._removeClass(openPoints[i], 'is-touched');
+                        }
+                    }
                 });
+
                 imagesIds.push(imageId);
             }
         } else {
@@ -139,7 +155,6 @@ _ikProductsImageGallery.prototype._addPoint = function (imageId, point) {
                                 '<img src="' + service.settings.imagesUrl + point.point_icon + '" alt="">' +
                             '</div>' +
                             '<div class="ikPGallery-point-popup">' + document.querySelectorAll(service.settings.pointTemplate)[0].innerHTML + '</div>';
-
     for (var key in point){
         var element = pointElement.querySelectorAll('[data-bind-value="' + key + '"]');
         if (element.length > 0){
@@ -150,9 +165,11 @@ _ikProductsImageGallery.prototype._addPoint = function (imageId, point) {
     }
     parent.appendChild(pointElement);
 
-    if (this.settings.draggable){
-        this._draggable(point, parent, pointElement);
+    if (service.settings.draggable){
+        service._draggable(point, parent, pointElement);
     }
+
+    service._checkPopupPosition(parent, pointElement, point.position);
 };
 
 /**
@@ -218,6 +235,69 @@ _ikProductsImageGallery.prototype._removePopup = function (overlay, popup) {
 };
 
 /**
+ * On window resize functions
+ * @private
+ */
+_ikProductsImageGallery.prototype._onResize = function () {
+    var service = this;
+
+    window.addEventListener('resize', function () {
+        for (var imageIndex = 0; imageIndex < service.imagesElements.length; imageIndex++){
+            var image = service.imagesElements[imageIndex],
+                points = image.parentNode.querySelectorAll('.ikPGallery-point');
+
+            for (var pointIndex = 0; pointIndex < points.length; pointIndex++){
+                var pointElement = points[pointIndex],
+                    position = {
+                        x: parseFloat(pointElement.style.left),
+                        y: parseFloat(pointElement.style.top)
+                    };
+                service._checkPopupPosition(image, pointElement, position);
+            }
+        }
+    });
+};
+
+/**
+ * Check point position and set popup position
+ * @param parent
+ * @param pointElement
+ * @param position
+ * @private
+ */
+_ikProductsImageGallery.prototype._checkPopupPosition = function (parent, pointElement, position) {
+    var service = this,
+    imageSize = {
+        width: parent.clientWidth,
+        height: parent.clientHeight
+    },
+    pointPosition = {
+        x: parseFloat(imageSize.width * parseFloat(position.x) / 100),
+        y: parseFloat(imageSize.height * parseFloat(position.y) / 100)
+    };
+
+    service._removeClass(pointElement, 'popup-y-top');
+    service._removeClass(pointElement, 'popup-y-bottom');
+    service._removeClass(pointElement, 'popup-x-left');
+    service._removeClass(pointElement, 'popup-x-center');
+    service._removeClass(pointElement, 'popup-x-right');
+
+    if (pointPosition.y < service.settings.popupIndent.top){
+        service._addClass(pointElement, 'popup-y-bottom');
+    } else {
+        service._addClass(pointElement, 'popup-y-top');
+    }
+
+    if (pointPosition.x < service.settings.popupIndent.left){
+        service._addClass(pointElement, 'popup-x-right');
+    } else if (pointPosition.x > imageSize.width - service.settings.popupIndent.right){
+        service._addClass(pointElement, 'popup-x-left');
+    } else {
+        service._addClass(pointElement, 'popup-x-center');
+    }
+};
+
+/**
  * Add draggable event to point
  * @param point
  * @param parent
@@ -229,7 +309,7 @@ _ikProductsImageGallery.prototype._draggable = function (point, parent, pointEle
         position = point.position,
         image = parent.querySelectorAll(service.settings.imageQuerySelector)[0];
 
-    pointElement.onmousedown = function(e) {
+    pointElement.querySelectorAll('.ikPGallery-point-pin')[0].onmousedown = function(e) {
         position = point.position;
         service._addClass(pointElement, 'dragged');
         service._addClass(image, 'dragged');
@@ -239,21 +319,34 @@ _ikProductsImageGallery.prototype._draggable = function (point, parent, pointEle
             position = coordinates;
             pointElement.style.top = coordinates.y;
             pointElement.style.left = coordinates.x;
+            service._checkPopupPosition(image, pointElement, position);
         };
 
         document.onmouseup = function (e) {
             image.onmousemove = null;
             point.position = position;
+            service._checkPopupPosition(image, pointElement, position);
             service._removeClass(pointElement, 'dragged');
             service._removeClass(image, 'dragged');
         };
     };
 
-    pointElement.addEventListener('touchstart', function (e) {
+    pointElement.querySelectorAll('.ikPGallery-point-pin')[0].addEventListener('touchstart', function (e) {
         position = point.position;
+        if (!service._hasClass(pointElement, 'is-touched')) {
+            var openPoints = image.parentNode.querySelectorAll('.ikPGallery-point.is-touched');
+            if (openPoints.length > 0){
+                for (var i = 0; i < openPoints.length; i++){
+                    service._removeClass(openPoints[i], 'is-touched');
+                }
+            }
+            service._addClass(pointElement, 'is-touched');
+        } else {
+            service._removeClass(pointElement, 'is-touched');
+        }
     });
 
-    pointElement.addEventListener('touchmove', function (event) {
+    pointElement.querySelectorAll('.ikPGallery-point-pin')[0].addEventListener('touchmove', function (event) {
         event.preventDefault();
         event.stopPropagation();
         var coordinates = service._getTouchXY(event, image);
@@ -261,11 +354,13 @@ _ikProductsImageGallery.prototype._draggable = function (point, parent, pointEle
         pointElement.style.top = coordinates.y;
         pointElement.style.left = coordinates.x;
         service._addClass(pointElement, 'dragged');
+        service._removeClass(pointElement, 'is-touched');
         service._addClass(image, 'dragged');
     });
 
-    pointElement.addEventListener('touchend', function (e) {
+    pointElement.querySelectorAll('.ikPGallery-point-pin')[0].addEventListener('touchend', function (e) {
         point.position = position;
+        service._checkPopupPosition(image, pointElement, position);
         service._removeClass(pointElement, 'dragged');
         service._removeClass(image, 'dragged');
     });
@@ -329,6 +424,15 @@ _ikProductsImageGallery.prototype._wrap = function(el, htmlElement, attributes) 
     wrapper.appendChild(el);
 };
 
+_ikProductsImageGallery.prototype._is_touch_device = function () {
+    try {
+        document.createEvent("TouchEvent");
+        return true;
+    } catch (e) {
+        return false;
+    }
+};
+
 /**
  * Check class exist of element
  * @param element
@@ -380,12 +484,21 @@ _ikProductsImageGallery.prototype._removeClass = function(element, className) {
  * @returns {{x: string, y: string}}
  * @private
  */
-_ikProductsImageGallery.prototype._getImageXY = function (event) {
-    console.log(event);
-    return {
-        x: parseFloat(((event.pageX - event.target.x) * 100) / event.target.clientWidth).toFixed(2) + '%',
-        y: parseFloat(((event.pageY - event.target.y) * 100) / event.target.clientHeight).toFixed(2) + '%'
+_ikProductsImageGallery.prototype._getImageXY = function (event, type) {
+    var position = {
+        x: event.pageX - event.target.x,
+        y: event.pageY - event.target.y
     };
+    switch (type){
+        case 'number':
+            return position;
+        case 'percent':
+        default:
+            return {
+                x: parseFloat((position.x * 100) / event.target.clientWidth).toFixed(2) + '%',
+                y: parseFloat((position.y * 100) / event.target.clientHeight).toFixed(2) + '%'
+            };
+    }
 };
 
 /**
@@ -395,26 +508,36 @@ _ikProductsImageGallery.prototype._getImageXY = function (event) {
  * @returns {{x: string, y: string}}
  * @private
  */
-_ikProductsImageGallery.prototype._getTouchXY = function (event, image) {
+_ikProductsImageGallery.prototype._getTouchXY = function (event, image, type) {
     var imageOffset = this._getOffset(image),
-        x = parseFloat(((event.changedTouches[0].pageX - imageOffset.left) * 100) / image.clientWidth).toFixed(2),
-        y = parseFloat(((event.changedTouches[0].pageY - imageOffset.top) * 100) / image.clientHeight).toFixed(2);
+        position = {
+            x: event.changedTouches[0].pageX - imageOffset.left,
+            y: event.changedTouches[0].pageY - imageOffset.top
+        };
+    switch (type){
+        case 'number':
+            return position;
+        case 'percent':
+        default:
+            var x = parseFloat((position.x * 100) / image.clientWidth).toFixed(2),
+                y = parseFloat((position.y * 100) / image.clientHeight).toFixed(2);
 
-    if (x < 0){
-        x = 0;
-    } else if(x > 100) {
-        x = 100;
-    }
+            if (x < 0){
+                x = 0;
+            } else if(x > 100) {
+                x = 100;
+            }
 
-    if (y < 0){
-        y = 0;
-    } else if(y > 100) {
-        y = 100;
-    }
+            if (y < 0){
+                y = 0;
+            } else if(y > 100) {
+                y = 100;
+            }
 
-    return {
-        x: x + '%',
-        y: y + '%'
+            return {
+                x: x + '%',
+                y: y + '%'
+            };
     }
 };
 

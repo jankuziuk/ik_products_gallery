@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php $date = new DateTime(); ?>
 <head>
     <meta charset="UTF-8">
     <title>IK Products Gallery</title>
     <meta name="viewport" content="width=device-width,user-scalable=no">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css?v=<?php echo $date->getTimestamp(); ?>">
 </head>
 <body>
 
@@ -226,7 +227,6 @@
         </div>
     </div>
 </div>
-<?php $date = new DateTime(); ?>
 <script type="text/javascript" src="js/ikProductsGallery.js?v=<?php echo $date->getTimestamp(); ?>"></script>
 </body>
 </html>
