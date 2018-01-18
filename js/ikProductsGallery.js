@@ -1,3 +1,12 @@
+/**
+ * IK products gallery
+ * @description Product gallery points on image
+ * @version 1.0.2
+ * @author Ivan Kuziuk
+ * @authoremail kuzyuk@gmail.com
+ * @lastmadificated 18.01.2018
+ */
+
 var ikProductsImageGalleryDefault = {
     draggable: true,
     popupIndent: {
