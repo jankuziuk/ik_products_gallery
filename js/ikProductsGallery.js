@@ -179,6 +179,9 @@ _ikProductsImageGallery.prototype._addPoint = function (imageId, point) {
     }
 
     service._checkPopupPosition(parent, pointElement, point.position);
+    pointElement.addEventListener('mouseover', function () {
+        service._checkPopupPosition(parent, pointElement, point.position);
+    });
 };
 
 /**
