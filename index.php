@@ -223,7 +223,7 @@
             <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" class="btn btn-primary btn-block" target="_blank">Zobać</a>
         </div>
         <div class="pp-product-btn">
-            <button type="button" class="btn btn-danger btn-block">Usuń</button>
+            <button type="button" class="btn btn-danger btn-block btn-remove-point">Usuń</button>
         </div>
     </div>
 </div>

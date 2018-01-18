@@ -19,8 +19,9 @@ var ikProductsImageGalleryDefault = {
     imageQuerySelector: 'img',
     imageWrapperClass: 'ikPGallery-image-wr',
     imageIdAttribute: 'data-id',
-    addProductPopup: '.add-product-popup',
-    addProductForm: '.add-product-form',
+    addPointPopup: '.add-product-popup',
+    addPointForm: '.add-product-form',
+    removePointSelector: '.btn-remove-point',
     closePopupBtn: '.ikProductsGallery-close-btn',
     savePointsButton: '.save-all-points',
     pointTemplate: '.point-element',
@@ -29,7 +30,7 @@ var ikProductsImageGalleryDefault = {
     selectTypeIcon: '[name="point_icon"]',
     typeIconDefault: 'pin_red.svg',
     imagesUrl: 'images/',
-    addProductFormOnSubmit: function (form, service, image, point) {}
+    addPointFormOnSubmit: function (form, service, image, point) {}
 };
 
 if (typeof ikExtend === 'undefined' || typeof ikExtend !== 'function') {
@@ -139,7 +140,7 @@ _ikProductsImageGallery.prototype._setPoints = function (images) {
             if (image in service.images){
                 service.images[image].points = images[image].points;
                 for (var point in service.images[image].points) {
-                    service._addPoint(image, service.images[image].points[point]);
+                    service._addPoint(image, service.images[image].points[point], point);
                 }
             }
         }
@@ -152,12 +153,13 @@ _ikProductsImageGallery.prototype._setPoints = function (images) {
  * @param point
  * @private
  */
-_ikProductsImageGallery.prototype._addPoint = function (imageId, point) {
+_ikProductsImageGallery.prototype._addPoint = function (imageId, point, index) {
     var service = this,
         pointElement = document.createElement('div'),
         parent = service.element.querySelectorAll(service.settings.imageQuerySelector + '[' + service.settings.imageIdAttribute + '="' + imageId + '"]')[0].parentNode;
 
     pointElement.setAttribute('class', 'ikPGallery-point');
+    pointElement.setAttribute('data-point-index', index);
     pointElement.style.top = point.position.y;
     pointElement.style.left = point.position.x;
     pointElement.innerHTML = '<div class="ikPGallery-point-pin">' +
@@ -174,14 +176,53 @@ _ikProductsImageGallery.prototype._addPoint = function (imageId, point) {
     }
     parent.appendChild(pointElement);
 
+    var removeBtn = pointElement.querySelectorAll(service.settings.removePointSelector);
+    if (removeBtn.length > 0) {
+        removeBtn = removeBtn[0];
+        removeBtn.setAttribute('data-image-id', imageId);
+        removeBtn.setAttribute('data-point-index', index);
+    }
+
     if (service.settings.draggable){
         service._draggable(point, parent, pointElement);
     }
+
+    service._removePoint(removeBtn);
 
     service._checkPopupPosition(parent, pointElement, point.position);
     pointElement.addEventListener('mouseover', function () {
         service._checkPopupPosition(parent, pointElement, point.position);
     });
+};
+
+_ikProductsImageGallery.prototype._removePoint = function (removeBtn) {
+    var service = this;
+    removeBtn.addEventListener('click', function () {
+        var imageId = parseInt(this.getAttribute('data-image-id')),
+            pointIndex = parseInt(this.getAttribute('data-point-index'));
+
+        if (imageId in service.images && service.images[imageId].points[pointIndex]){
+            service.images[imageId].points.splice(pointIndex, 1);
+            var point = service.element.querySelectorAll(service.settings.imageQuerySelector + '[' + service.settings.imageIdAttribute + '="' + imageId + '"]')[0].parentNode.querySelectorAll('.ikPGallery-point[data-point-index="' + pointIndex + '"]')[0];
+            point.parentNode.removeChild(point);
+            service._updatePointsIndexes(imageId);
+        }
+    });
+};
+
+_ikProductsImageGallery.prototype._updatePointsIndexes = function (imageId) {
+    var service = this,
+        points = service.element.querySelectorAll(service.settings.imageQuerySelector + '[' + service.settings.imageIdAttribute + '="' + imageId + '"]')[0].parentNode.querySelectorAll('.ikPGallery-point');
+
+    if (points.length > 0){
+        for (var index = 0; index < points.length; index++){
+            points[index].setAttribute('data-point-index', index);
+            var removeBtn = points[index].querySelectorAll(service.settings.removePointSelector);
+            if (removeBtn.length > 0) {
+                removeBtn[0].setAttribute('data-point-index', index);
+            }
+        }
+    }
 };
 
 /**
@@ -198,12 +239,12 @@ _ikProductsImageGallery.prototype._addPopup = function (image, pointXY) {
     overlay.setAttribute('class', 'ikPGallery-image-overlay');
 
     popup.setAttribute('class', 'ikPGallery-image-popup');
-    popup.innerHTML = document.querySelectorAll(service.settings.addProductPopup)[0].innerHTML;
+    popup.innerHTML = document.querySelectorAll(service.settings.addPointPopup)[0].innerHTML;
 
     image.parentNode.appendChild(overlay);
     image.parentNode.appendChild(popup);
 
-    var form = popup.querySelectorAll(service.settings.addProductForm)[0],
+    var form = popup.querySelectorAll(service.settings.addPointForm)[0],
         buttonClose = popup.querySelectorAll(service.settings.closePopupBtn)[0];
 
     form.onsubmit = function (e) {
@@ -224,7 +265,7 @@ _ikProductsImageGallery.prototype._addPopup = function (image, pointXY) {
         service.images[imageId].points.push(point);
         service._removePopup(overlay, popup);
         service._addPoint(imageId, point);
-        service.settings.addProductFormOnSubmit(form, service, image, point);
+        service.settings.addPointFormOnSubmit(form, service, image, point);
     };
 
     overlay.addEventListener('click', function () {
@@ -612,5 +653,5 @@ var ikProductsImageGallery = function (selector, options) {
 
 new ikProductsImageGallery('.ikProductsGallery', {
     imageQuerySelector: 'img.ikPGallery-image',
-    addProductFormId: 'add_product_popup'
+    addPointFormId: 'add_product_popup'
 });
