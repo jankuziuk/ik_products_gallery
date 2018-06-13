@@ -12,11 +12,16 @@ body{
     vertical-align: middle;
     text-align: left;
     position: relative;
+    margin-bottom: 10px;
 }
 
 .ikPGallery-image-wr img{
     display: block;
     margin: auto;
+}
+
+.ikPGallery-image {
+    max-width: 100%;
 }
 
 .ikPGallery-image-overlay{
@@ -264,6 +269,10 @@ body{
 }
 
 .ikPGallery-point.dragged .ikPGallery-point-pin{
+    pointer-events: none;
+}
+
+.ikPGallery-image.dragged + .ikPGallery-points .ikPGallery-point:not(.dragged){
     pointer-events: none;
 }
 

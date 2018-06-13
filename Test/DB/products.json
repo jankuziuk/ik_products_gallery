@@ -1,0 +1,52 @@
+[
+    {
+        "product_id": 522860,
+        "product_name": "Procesor AMD APU A4-5300, 3.4GHz, 1MB, BOX (AD5300OKHJBOX)",
+        "product_price": 3144.34
+    },
+    {
+        "product_id": 522861,
+        "product_name": "Procesor AMD APU A6-5400K, 3.6GHz, 1MB, BOX (AD540KOKHJBOX)",
+        "product_price": 3144.34
+    },
+    {
+        "product_id": 524978,
+        "product_name": "Procesor Intel CORE I5-3360M 2.80GHZ (BX80638I53360M)",
+        "product_price": 3144.34
+    },
+    {
+        "product_id": 529048,
+        "product_name": "Procesor AMD FX-8320, X8, 3.5GHz, 16MB, BOX (FD8320FRHKBOX)",
+        "product_price": 3144.34
+    },
+    {
+        "product_id": 532173,
+        "product_name": "Procesor AMD FX-6300, socket, 3.5GHz, 14MB, BOX (FD6300WMHKBOX)",
+        "product_price": 3144.34
+    },
+    {
+        "product_id": 532269,
+        "product_name": "Procesor AMD FX-8350, X8, 4.0GHz, 16MB, BOX (FD8350FRHKBOX)",
+        "product_price": 3144.34
+    },
+    {
+        "product_id": 533393,
+        "product_name": "Procesor AMD FX-4300, 3.8GHz, 4MB, BOX (FD4300WMHKBOX)",
+        "product_price": 3144.34
+    },
+    {
+        "product_id": 555957,
+        "product_name": "Procesor AMD Athlon II X2 340, 3.2 GHz, 2MB, BOX (AD340XOKHJBOX)",
+        "product_price": 3144.34
+    },
+    {
+        "product_id": 576587,
+        "product_name": "Procesor AMD APU A4-4000, 3.0GHz, 1MB, BOX (AD4000OKHLBOX)",
+        "product_price": 3144.34
+    },
+    {
+        "product_id": 576589,
+        "product_name": "Procesor AMD FX-6350, 3.9GHz, 14MB, BOX (FD6350FRHKBOX)",
+        "product_price": 3144.34
+    }
+]

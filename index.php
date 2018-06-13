@@ -11,14 +11,61 @@
 <body>
 
 
-<div class="ikProductsGallery" style="margin: 10px;" data-gallery-id="1">
-    <div class="ikPGallery-items">
-        <img data-id="5555" class="ikPGallery-image" src="images/preview.jpg" style="max-width: 100%;" alt="" />
+<?php
+    include "Test/Controller.php";
+
+    $service_points = new \Test\Controller();
+    $images = $service_points->getImages();
+    $points = $service_points->getPoints();
+    $pinsTypes = $service_points->getPinsTypes();
+    $products = $service_points->getProducts();
+?>
+
+<?php for ($i = 0; $i < 2; $i++): ?>
+    <div class="ikProductsGallery" data-gallery-id="<?php echo $i; ?>" style="margin: 10px;">
+        <div class="ikPGallery-items">
+            <?php foreach ($images as $imageID=>$imageUrl): ?>
+                <div class="ikPGallery-image-wr">
+                    <img src="images/<?php echo $imageUrl; ?>" data-id="<?php echo $imageID; ?>" class="ikPGallery-image" alt="" />
+                    <?php if (isset($points[$imageID])): ?>
+                        <div class="ikPGallery-points">
+                            <?php foreach ($points[$imageID] as $index=>$point): ?>
+                                    <div class="ikPGallery-point"
+                                         data-point="<?php echo htmlspecialchars(json_encode($point), ENT_QUOTES, 'UTF-8'); ?>"
+                                         style="top: <?php echo $point['position']['y']; ?>; left: <?php echo $point['position']['x']; ?>"
+                                    >
+                                        <div class="ikPGallery-point-pin"><img src="images/pins/<?php echo $pinsTypes[$point['point_icon_type']]; ?>" alt=""></div>
+                                        <div class="ikPGallery-point-popup">
+                                            <div class="ikPGallery-pp-product">
+                                                <div class="pp-product-top">
+                                                    <div class="pp-product-left">
+                                                        <img src="https://images.morele.net/i256/1329100_0_i256.jpg" alt="">
+                                                    </div>
+                                                    <div class="pp-product-right">
+                                                        <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" target="_blank">Monitor LG 34UM69G-B</a>
+                                                        <div class="pp-product-price">1999,00 zł</div>
+                                                    </div>
+                                                </div>
+                                                <div class="pp-product-btn" style="margin-bottom: 5px;">
+                                                    <a href="https://www.morele.net/monitor-lg-34um69g-b-1329100/" class="btn btn-primary btn-block" target="_blank">Zobać</a>
+                                                </div>
+                                                <div class="pp-product-btn">
+                                                    <button type="button" class="btn btn-danger btn-block btn-remove-point" data-image-id="5555" data-point-index="0">Usuń</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <div style="margin: 20px; text-align: center;">
+            <button type="button" class="btn btn-primary btn-block save-all-points">Zapisz zmiany!!!</button>
+        </div>
     </div>
-    <div style="margin: 20px; text-align: center;">
-        <button type="button" class="btn btn-primary btn-block save-all-points">Zapisz zmiany!!!</button>
-    </div>
-</div>
+<?php endfor; ?>
 
 <div class="add-product-popup" style="display: none;">
     <div class="ikProductsGallery-addProduct">
@@ -228,5 +275,6 @@
     </div>
 </div>
 <script type="text/javascript" src="js/ikProductsGallery.js?v=<?php echo $date->getTimestamp(); ?>"></script>
+<script type="text/javascript" src="Test/init.js?v=<?php echo $date->getTimestamp(); ?>"></script>
 </body>
 </html>
